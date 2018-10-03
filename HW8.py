@@ -21,10 +21,7 @@ class Fraction:
         else:
             self.num = numerator
             self.den = denominator
-
-    def show(self):
-        print(self.num, "/", self.den)
-
+            
     def __str__(self):
         if self.num > self.den:
             whole = self.num // self.den
