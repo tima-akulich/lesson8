@@ -12,6 +12,6 @@ else:
 
 x = Fraction(2, 1)
 if (str(x) == "3/1"):
-    print('Pass')
-else:
     print('Fail')
+else:
+    print('Pass')
