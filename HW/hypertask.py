@@ -1,3 +1,6 @@
+import re
+
+
 def _gcd(i, j):
     while i % j != 0:
         ii = i
@@ -20,33 +23,45 @@ class fraction:
             self.numerator /= reduc
             self.denominator /= reduc
             self.numerator += int(str(args[0])[:str(args[0]).find('.')]) * self.denominator
+        elif len(args) == 1 and type(args[0]) is str and re.match(r'\d+.\d*[(]\d+[)]', args[0]):
+            i1 = args[0][args[0].find('.') + 1: args[0].find('(')] + args[0][args[0].find('(') + 1: args[0].find(')')]
+            i2 = args[0][args[0].find('.') + 1: args[0].find('(')]
+            if len(i2) == 0:
+                i2 = '0'
+                i3 = '9' * len(args[0][args[0].find('(') + 1: args[0].find(')')])
+            else:
+                i3 = '9' * len(args[0][args[0].find('(') + 1: args[0].find(')')]) * 10 ** len(i2)
+            i4 = args[0][:args[0].find('.')]
+            reduc = _gcd(int(i1) - int(i2), int(i3))
+            self.denominator = int(i3) / reduc
+            self.numerator = (int(i1) - int(i2)) / reduc + int(i4) * self.denominator
         else:
             raise ValueError
 
     def __add__(self, other):
         n = self.numerator * other.denominator + other.numerator * self.denominator
         d = self.denominator * other.denominator
-        return fraction(n / d)
+        return fractionn(n, d)
 
     def __sub__(self, other):
         n = self.numerator * other.denominator - other.numerator * self.denominator
         d = self.denominator * other.denominator
-        return fraction(n / d)
+        return fractionn(n, d)
 
     def __mul__(self, other):
         n = self.numerator * other.numerator
         d = self.denominator * other.denominator
-        return fraction(n / d)
+        return fractionn(n, d)
 
     def __truediv__(self, other):
         n = self.numerator * other.denominator
         d = self.denominator * other.numerator
-        return fraction(n / d)
+        return fractionn(n, d)
 
     def __pow__(self, a):
         n = self.numerator ** a
         d = self.denominator ** a
-        return fraction(n / d)
+        return fractionn(n, d)
 
     def __eq__(self, other):
         return self.numerator * other.denominator == other.numerator * self.denominator
@@ -75,3 +90,9 @@ class fraction:
             return '1'
         elif self.numerator < self.denominator:
             return str(int(self.numerator)) + '/' + str(int(self.denominator))
+
+
+class fractionn(fraction):
+    def __init__(self, n, d):
+        self.numerator = n / _gcd(n, d)
+        self.denominator = d / _gcd(n, d)
