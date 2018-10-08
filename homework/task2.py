@@ -16,7 +16,7 @@ class Thumbnailer:
         self.path = path
         self.width = width
         self.height = height
-        self.images = self._get_images()
+        self.images = list(self._get_images())
 
     def _get_images(self):
         return get_images(self.path)
@@ -25,7 +25,9 @@ class Thumbnailer:
         for image in self.images:
             _image = Image.open(image)
             _image.thumbnail((self.width, self.height))
-            _image.save(_image.filename.replace('.jpg', '-thumb.jpg'))
+            name = _image.filename.replace('.jpg', '-thumb.jpg')
+            _image.save(name)
+            yield name
 
 
 if __name__ == '__main__':
